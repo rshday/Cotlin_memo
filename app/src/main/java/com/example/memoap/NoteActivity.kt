@@ -1,6 +1,7 @@
 package com.example.memoap
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -27,6 +28,11 @@ class NoteActivity : AppCompatActivity() {
         when(item.itemId)
         {
             R.id.mm_save->{
+                val dat = NoteData("a","asd")
+                val editer = NoteEditer()
+
+                editer.MakeJsonFile(dat,this)
+
                 val intent = Intent(this,MainActivity::class.java)
                 startActivity(intent)
                 return true
