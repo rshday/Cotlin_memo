@@ -2,38 +2,124 @@ package com.example.memoap
 
 import android.content.Context
 import android.util.Log
-import java.io.BufferedWriter
-import java.io.File
-import java.io.FileWriter
-import java.io.IOException
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
+import java.io.*
 
 
 class NoteEditer {
 
-    fun EditNote()
+    fun JsonAdd(context: Context, item : NoteData)
     {
+        val path : String = context.getExternalFilesDir("")!!.absolutePath + "/notelist.json"
+        var dataArr : ArrayList<NoteData> = ArrayList<NoteData>()
+        val gson = GsonBuilder().create()
+
+        if(JsonExist(path))
+        {
+            dataArr = ArrRead(path)
+            dataArr.add(item)
+            val Jdata = gson.toJson(dataArr,object :TypeToken<ArrayList<NoteData>>(){}.type)
+            write(path,Jdata.toString())
+            Log.d("test","JsonAdd dataArr - ${dataArr.toString()}")
+        }
+        else
+        {
+            JsonCreate(path)
+            JsonAdd(context,item)
+        }
+    }
+
+    private fun JsonExist(path : String) : Boolean
+    {
+        val file : File = File(path)
+        var cnt :Int = 0
+
+        if(file.exists())
+        {
+            val reader : FileReader  = FileReader(path)
+            val buffer : BufferedReader = BufferedReader(reader)
+            try {
+                cnt = buffer.read()
+                Log.d("test","exists cnt - $cnt")
+            }
+            catch (e : IOException)
+            {
+                Log.d("test",e.toString())
+            }
+
+            buffer.close()
+            reader.close()
+
+            if(cnt <= 0) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    private fun JsonCreate(path : String)
+    {
+        var dataArr : ArrayList<NoteData> = ArrayList<NoteData>()
+        val gson = GsonBuilder().create()
+        val Jdata = gson.toJson(dataArr,object :TypeToken<ArrayList<NoteData>>(){}.type)
+
+        write(path,Jdata.toString())
 
     }
 
-    fun MakeJsonFile(noteData: NoteData, context: Context)
+    private fun ArrRead(path : String) : ArrayList<NoteData>
     {
-        val path : String = context.getExternalFilesDir("")!!.absolutePath
-        val fname : String = "/test.txt"
-        Log.d("test",path)
+        var dataArr : ArrayList<NoteData> = ArrayList<NoteData>()
+        val gson = GsonBuilder().create()
+        val Rdata : String = read(path)
+
+        if(!Rdata.isEmpty())
+        {
+            dataArr = gson.fromJson(Rdata, object :TypeToken<ArrayList<NoteData>>(){}.type)
+        }
+
+        return dataArr
+    }
+
+    private fun write(path: String , data :String)
+    {
+        val writer : FileWriter  = FileWriter(path)
+        val buffer : BufferedWriter = BufferedWriter(writer)
         try {
-            val writer : FileWriter  = FileWriter(path+fname)
-            val buffer : BufferedWriter = BufferedWriter(writer)
-
-            buffer.write(noteData.text)
-            Log.d("test","Create file")
-
-            buffer.close()
-            writer.close()
-            Log.d("test","Close file")
+            buffer.write(data)
+            Log.d("test","write file - $data")
         }
         catch (e : IOException)
         {
             Log.d("test",e.toString())
         }
+        buffer.close()
+        writer.close()
+        Log.d("test","Close file")
     }
+
+    private fun read(path: String) :String
+    {
+        val reader : FileReader  = FileReader(path)
+        val buffer : BufferedReader = BufferedReader(reader)
+        var ret : String = ""
+
+        try {
+            ret = buffer.readText()
+            Log.d("test","read file - $ret")
+        }
+        catch (e : IOException)
+        {
+            Log.d("test",e.toString())
+        }
+
+        buffer.close()
+        reader.close()
+
+        return ret
+    }
+
 }

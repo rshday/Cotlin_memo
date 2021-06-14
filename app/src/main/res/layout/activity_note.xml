@@ -7,7 +7,7 @@
     tools:context=".NoteActivity">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/title_text"
         android:layout_width="match_parent"
         android:layout_height="50sp"
         android:hint="Title"
@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:id="@+id/text_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="50dp"
@@ -24,6 +25,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/title_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

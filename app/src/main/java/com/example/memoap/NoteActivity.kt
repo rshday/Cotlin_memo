@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import kotlinx.android.synthetic.main.activity_note.*
 
 class NoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,10 +29,9 @@ class NoteActivity : AppCompatActivity() {
         when(item.itemId)
         {
             R.id.mm_save->{
-                val dat = NoteData("a","asd")
+                val item = NoteData(title_text.text.toString(),text_text.text.toString())
                 val editer = NoteEditer()
-
-                editer.MakeJsonFile(dat,this)
+                editer.JsonAdd(this,item)
 
                 val intent = Intent(this,MainActivity::class.java)
                 startActivity(intent)
