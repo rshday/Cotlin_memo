@@ -1,4 +1,4 @@
-# Cotlin_memo
+# Kotlin_memo
 ### 간단한 메모 어플입니다.
 #### 메인 화면 입니다.
 ![캡처](https://user-images.githubusercontent.com/45552613/122171545-cc320080-ceba-11eb-96e2-e98b53e32f6d.PNG)
