@@ -6,13 +6,20 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.io.*
+import java.text.FieldPosition
 
 
 class NoteEditer {
 
-    fun JsonAdd(context: Context, item : NoteData)
+    fun getPath(context: Context) :String
     {
         val path : String = context.getExternalFilesDir("")!!.absolutePath + "/notelist.json"
+        return path
+    }
+
+    fun JsonAdd(context: Context, item : NoteData)
+    {
+        val path : String = getPath(context)
         var dataArr : ArrayList<NoteData> = ArrayList<NoteData>()
         val gson = GsonBuilder().create()
 
@@ -28,6 +35,21 @@ class NoteEditer {
         {
             JsonCreate(path)
             JsonAdd(context,item)
+        }
+    }
+
+    fun JsonDel(context: Context, index: Int)
+    {
+        val path : String = getPath(context)
+        var dataArr : ArrayList<NoteData> = ArrayList<NoteData>()
+        val gson = GsonBuilder().create()
+        if(JsonExist(path))
+        {
+            dataArr = ArrRead(path)
+            dataArr.removeAt(index)
+            val Jdata = gson.toJson(dataArr,object :TypeToken<ArrayList<NoteData>>(){}.type)
+            write(path,Jdata.toString())
+            Log.d("test","JsonRemove dataArr - ${dataArr.toString()}")
         }
     }
 
@@ -70,7 +92,7 @@ class NoteEditer {
 
     }
 
-    private fun ArrRead(path : String) : ArrayList<NoteData>
+    fun ArrRead(path : String) : ArrayList<NoteData>
     {
         var dataArr : ArrayList<NoteData> = ArrayList<NoteData>()
         val gson = GsonBuilder().create()
